@@ -9,6 +9,12 @@ public record AddIndividualCommand(
         GenderType Gender,
         string PersonalNumber,
         DateTime DateOfBirth,
-        int CityId
+        int CityId,
+        List<AddPhoneNumberDto> PhoneNumbers
     ) : ICommandQuery;
+
+public record AddPhoneNumberDto(
+        PhoneNumberType Type,
+        string Number
+    );
 

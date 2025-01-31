@@ -11,8 +11,9 @@ public sealed class PhoneNumber : Entity
 
     private PhoneNumber() { } // EF Core requirement
 
-    public PhoneNumber(PhoneNumberType type, string number)
+    public PhoneNumber(int individualId,PhoneNumberType type, string number)
     {
+        IndividualId = individualId;
         Type = type;
         Number = number;
     }

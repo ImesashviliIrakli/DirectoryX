@@ -40,4 +40,32 @@ public class Individual : Entity
         CityId = cityId;
         ImagePath = imagePath;
     }
+
+    public void AddPhoneNumbers(List<PhoneNumber> phoneNumbers)
+    {
+        _phoneNumbers.AddRange(phoneNumbers);
+    }
+
+    public void UpdateBasicInfo(
+        string firstName,
+        string lastName,
+        GenderType gender,
+        string personalNumber,
+        DateTime dateOfBirth,
+        int cityId
+        )
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Gender = gender;
+        PersonalNumber = personalNumber;
+        DateOfBirth = dateOfBirth;
+        CityId = cityId;
+    }
+
+    public void UpdatePhoneNumbers(List<PhoneNumber> phoneNumbers)
+    {
+        _phoneNumbers.Clear();
+        _phoneNumbers.AddRange(phoneNumbers);
+    }
 }
