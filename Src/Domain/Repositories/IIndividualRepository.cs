@@ -1,5 +1,8 @@
-﻿namespace Domain.Repositories;
+﻿using Domain.Entities;
 
-internal interface IIndividualRepository
+namespace Domain.Repositories;
+
+public interface IIndividualRepository
 {
+    Task AddAsync(Individual individual, CancellationToken cancellationToken = default);
 }

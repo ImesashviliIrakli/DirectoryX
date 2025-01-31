@@ -1,9 +1,19 @@
+using Application;
+using Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+// Register Serilog
+//builder.Host.UseSerilog((context, loggerConfig) =>
+//    loggerConfig.ReadFrom.Configuration(context.Configuration));
+
+// Register Class Libraries
+builder.Services.AddApplication(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration);
+
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
