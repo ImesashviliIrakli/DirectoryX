@@ -13,8 +13,3 @@ public record AddIndividualCommand(
         List<AddPhoneNumberDto> PhoneNumbers
     ) : ICommandQuery;
 
-public record AddPhoneNumberDto(
-        PhoneNumberType Type,
-        string Number
-    );
-

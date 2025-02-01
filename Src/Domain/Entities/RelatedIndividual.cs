@@ -9,11 +9,12 @@ public sealed class RelatedIndividual : Entity
     public int RelatedIndividualId { get; private set; } // Related Individual
     public RelationshipType RelationshipType { get; private set; }
 
-    private RelatedIndividual() { } // Required by EF Core
+    public RelatedIndividual() { } // Required by EF Core
 
-    public RelatedIndividual(int relatedIndividualId, RelationshipType relationshipType)
+    public RelatedIndividual(int individualId, int relatedIndividualId, RelationshipType relationshipType)
     {
         //ValidateConnectionType(relationshipType);
+        IndividualId = individualId;
         RelatedIndividualId = relatedIndividualId;
         RelationshipType = relationshipType;
     }

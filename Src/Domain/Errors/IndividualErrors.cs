@@ -8,4 +8,9 @@ public static class IndividualErrors
         "NotFound",
         "Individual not found."
         );
+
+    public static readonly Error ImageShouldNotBeEmpty = new(
+        "BadRequest",
+        "Image should not be empty."
+        );
 }

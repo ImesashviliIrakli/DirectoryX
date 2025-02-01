@@ -1,5 +1,7 @@
+using Api.Extensions;
 using Application;
 using Infrastructure;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +17,12 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    // Swagger configuration here
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
+});
+
 
 var app = builder.Build();
 
@@ -24,12 +31,18 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.ApplyMigrations();
+    app.SeedData();
 }
 
 app.UseHttpsRedirection();
 
+app.UseCustomExceptionHandler();
+
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCustomLanguageHandler();
 
 app.Run();

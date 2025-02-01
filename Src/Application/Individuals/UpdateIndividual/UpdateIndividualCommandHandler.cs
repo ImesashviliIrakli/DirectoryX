@@ -17,7 +17,11 @@ internal sealed class UpdateIndividualCommandHandler(
 
     public async Task<Result> Handle(UpdateIndividualCommand request, CancellationToken cancellationToken)
     {
-        var individual = await _individualRepository.GetByIdAsync(request.IndividualId, cancellationToken);
+        var individual = await _individualRepository.GetByIdAsync(
+            individualId: request.IndividualId, 
+            includeDetails: true,
+            cancellationToken:cancellationToken
+        );
 
         if (individual is null)
             return Result.Failure(GlobalStatusCodes.NotFound, IndividualErrors.IndividualNotFound);

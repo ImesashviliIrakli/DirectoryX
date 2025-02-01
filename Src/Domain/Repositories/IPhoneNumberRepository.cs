@@ -1,8 +1,6 @@
-﻿using Domain.Entities;
-
-namespace Domain.Repositories;
+﻿namespace Domain.Repositories;
 
 public interface IPhoneNumberRepository
 {
-    Task AddRangeAsync(List<PhoneNumber> phoneNumbers, CancellationToken cancellationToken = default);
+    Task DeleteAllByIndividualIdAsync(int individualId, CancellationToken cancellationToken = default);
 }

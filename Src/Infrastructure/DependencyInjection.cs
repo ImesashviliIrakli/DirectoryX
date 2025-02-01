@@ -21,6 +21,7 @@ public static class DependencyInjection
 
         services.AddScoped<IIndividualRepository, IndividualRepository>();
         services.AddScoped<IPhoneNumberRepository, PhoneNumberRepository>();
+        services.AddScoped<IRelatedIndividualRepository, RelatedIndividualRepository>();
 
         return services;
     }

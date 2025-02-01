@@ -9,7 +9,7 @@ public sealed class PhoneNumber : Entity
     public PhoneNumberType Type { get; private set; }
     public string Number { get; private set; }
 
-    private PhoneNumber() { } // EF Core requirement
+    public PhoneNumber() { } // EF Core requirement
 
     public PhoneNumber(int individualId,PhoneNumberType type, string number)
     {

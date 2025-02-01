@@ -13,9 +13,3 @@ public record UpdateIndividualCommand(
         int CityId,
         List<UpdatePhoneNumberDto> PhoneNumbers
     ) : ICommandQuery;
-
-public record UpdatePhoneNumberDto(
-    int PhoneNumberId,
-    PhoneNumberType NumberType,
-    string Number
-);

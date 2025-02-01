@@ -20,7 +20,7 @@ public class Individual : Entity
     public IReadOnlyCollection<PhoneNumber> PhoneNumbers => _phoneNumbers.AsReadOnly();
     public IReadOnlyCollection<RelatedIndividual> RelatedIndividuals => _relatedIndividuals.AsReadOnly();
 
-    private Individual() { } // EF Core requirement
+    public Individual() { } // EF Core requirement
 
     public Individual(
         string firstName,
@@ -39,6 +39,11 @@ public class Individual : Entity
         DateOfBirth = dateOfBirth;
         CityId = cityId;
         ImagePath = imagePath;
+    }
+
+    public void AddRelatedIndividual(List<RelatedIndividual> relatedIndividuals)
+    {
+        _relatedIndividuals.AddRange(relatedIndividuals);
     }
 
     public void AddPhoneNumbers(List<PhoneNumber> phoneNumbers)
@@ -67,5 +72,10 @@ public class Individual : Entity
     {
         _phoneNumbers.Clear();
         _phoneNumbers.AddRange(phoneNumbers);
+    }
+
+    public void UpdateImagePath(string path)
+    {
+        ImagePath = path;
     }
 }

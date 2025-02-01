@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Models;
 using Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,15 +8,94 @@ namespace Infrastructure.Repositories;
 internal sealed class IndividualRepository(AppDbContext context) : IIndividualRepository
 {
     private readonly AppDbContext _context = context;
-    public async Task<Individual?> GetByIdAsync(int individualId, CancellationToken cancellationToken = default)
+
+    public async Task<(List<Individual> Individuals, int TotalCount)> SearchIndividualsAsync(IndividualSearchCriteria criteria, CancellationToken cancellationToken = default)
     {
-        return await _context.Individuals
-            .Include(x => x.PhoneNumbers)
-            .FirstOrDefaultAsync(x => x.Id.Equals(individualId));
+        var query = _context.Individuals.AsQueryable();
+
+        // Quick Search (name, surname, or personal number)
+        if (!string.IsNullOrEmpty(criteria.QuickSearch))
+        {
+            var searchTerm = $"%{criteria.QuickSearch}%";
+            query = query.Where(i =>
+                EF.Functions.Like(i.FirstName, searchTerm) ||
+                EF.Functions.Like(i.LastName, searchTerm) ||
+                EF.Functions.Like(i.PersonalNumber, searchTerm));
+        }
+
+        // Detailed Search
+        if (!string.IsNullOrEmpty(criteria.FirstName))
+        {
+            query = query.Where(i => i.FirstName.Contains(criteria.FirstName));
+        }
+        if (!string.IsNullOrEmpty(criteria.LastName))
+        {
+            query = query.Where(i => i.LastName.Contains(criteria.LastName));
+        }
+        if (!string.IsNullOrEmpty(criteria.PersonalNumber))
+        {
+            query = query.Where(i => i.PersonalNumber.Contains(criteria.PersonalNumber));
+        }
+        if (criteria.Gender.HasValue)
+        {
+            query = query.Where(i => i.Gender == criteria.Gender.Value);
+        }
+        if (criteria.CityId.HasValue)
+        {
+            query = query.Where(i => i.CityId == criteria.CityId.Value);
+        }
+        if (criteria.DateOfBirthFrom.HasValue)
+        {
+            query = query.Where(i => i.DateOfBirth >= criteria.DateOfBirthFrom.Value);
+        }
+        if (criteria.DateOfBirthTo.HasValue)
+        {
+            query = query.Where(i => i.DateOfBirth <= criteria.DateOfBirthTo.Value);
+        }
+
+        // Get the total count of matching records (before paging)
+        int totalCount = await query.CountAsync(cancellationToken);
+
+        // Apply paging
+        var individuals = await query
+            .OrderBy(i => i.LastName) // Default sorting
+            .Skip((criteria.PageNumber - 1) * criteria.PageSize)
+            .Take(criteria.PageSize)
+            .ToListAsync(cancellationToken);
+
+        return (individuals, totalCount);
+    }
+
+    public async Task<Individual?> GetByIdAsync(int individualId, bool includeDetails = false, CancellationToken cancellationToken = default)
+    {
+        var query = _context.Individuals.AsQueryable();
+
+        if (includeDetails)
+        {
+            query = query
+                .Include(i => i.PhoneNumbers)
+                .Include(i => i.RelatedIndividuals);
+        }
+
+        return await query.FirstOrDefaultAsync(i => i.Id == individualId, cancellationToken);
+    }
+
+    public async Task<bool> CheckIfIndividualsExistAsync(int individualId, int relatedIndividualId, CancellationToken cancellationToken = default)
+    {
+        var count = await _context.Individuals
+        .Where(i => i.Id == individualId || i.Id == relatedIndividualId)
+        .CountAsync(cancellationToken);
+
+        return count == 2;
     }
 
     public async Task AddAsync(Individual individual, CancellationToken cancellationToken = default)
     {
         await _context.Individuals.AddAsync(individual, cancellationToken);
+    }
+
+    public void Delete(Individual individual)
+    {
+        _context.Individuals.Remove(individual);
     }
 }
