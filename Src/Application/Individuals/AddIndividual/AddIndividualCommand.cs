@@ -8,7 +8,7 @@ public record AddIndividualCommand(
         string LastName,
         GenderType Gender,
         string PersonalNumber,
-        DateTime DateOfBirth,
+        DateOnly DateOfBirth,
         int CityId,
         List<AddPhoneNumberDto> PhoneNumbers
     ) : ICommandQuery;

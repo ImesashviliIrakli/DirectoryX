@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using System.Data;
 
 namespace Infrastructure;
 public sealed class AppDbContext : DbContext, IUnitOfWork
@@ -24,7 +25,7 @@ public sealed class AppDbContext : DbContext, IUnitOfWork
         return await base.SaveChangesAsync(cancellationToken);
     }
 
-    public System.Data.IDbTransaction BeginTransaction()
+    public IDbTransaction BeginTransaction()
     {
         var transaction = Database.BeginTransaction();
         return transaction.GetDbTransaction();

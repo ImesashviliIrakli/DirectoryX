@@ -22,7 +22,6 @@ internal sealed class UpdateIndividualPictureCommandHandler(
     {
         var individual = await _individualRepository.GetByIdAsync(
             individualId: request.IndividualId, 
-            includeDetails: false,
             cancellationToken: cancellationToken
         );
 

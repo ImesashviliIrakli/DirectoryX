@@ -9,7 +9,7 @@ public class Individual : Entity
     public string LastName { get; private set; }
     public GenderType Gender { get; private set; }
     public string PersonalNumber { get; private set; }
-    public DateTime DateOfBirth { get; private set; }
+    public DateOnly DateOfBirth { get; private set; }
     public int CityId { get; private set; }
     public string ImagePath { get; private set; }
 
@@ -27,7 +27,7 @@ public class Individual : Entity
         string lastName,
         GenderType gender,
         string personalNumber,
-        DateTime dateOfBirth,
+        DateOnly dateOfBirth,
         int cityId,
         string imagePath = ""
         )
@@ -56,7 +56,7 @@ public class Individual : Entity
         string lastName,
         GenderType gender,
         string personalNumber,
-        DateTime dateOfBirth,
+        DateOnly dateOfBirth,
         int cityId
         )
     {
@@ -72,6 +72,11 @@ public class Individual : Entity
     {
         _phoneNumbers.Clear();
         _phoneNumbers.AddRange(phoneNumbers);
+    }
+
+    public void ClearPhoneNumbers()
+    {
+        _phoneNumbers.Clear();
     }
 
     public void UpdateImagePath(string path)

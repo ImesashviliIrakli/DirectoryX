@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250131153622_MainMigration")]
+    [Migration("20250202132024_MainMigration")]
     partial class MainMigration
     {
         /// <inheritdoc />
@@ -36,8 +36,8 @@ namespace Infrastructure.Migrations
                     b.Property<int>("CityId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("DateOfBirth")
+                        .HasColumnType("date");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -62,6 +62,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(11)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PersonalNumber")
+                        .IsUnique();
 
                     b.ToTable("Individuals");
                 });

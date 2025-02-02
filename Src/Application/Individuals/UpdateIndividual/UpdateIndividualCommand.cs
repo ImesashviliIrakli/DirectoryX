@@ -9,7 +9,7 @@ public record UpdateIndividualCommand(
         string LastName,
         GenderType Gender,
         string PersonalNumber,
-        DateTime DateOfBirth,
+        DateOnly DateOfBirth,
         int CityId,
         List<UpdatePhoneNumberDto> PhoneNumbers
     ) : ICommandQuery;

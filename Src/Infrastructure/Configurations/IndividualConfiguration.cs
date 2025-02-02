@@ -26,6 +26,9 @@ internal sealed class IndividualConfiguration : IEntityTypeConfiguration<Individ
             .HasMaxLength(11)
             .IsRequired();
 
+        builder.HasIndex(individual => individual.PersonalNumber)
+            .IsUnique();
+
         builder.Property(individual => individual.DateOfBirth)
             .IsRequired();
 

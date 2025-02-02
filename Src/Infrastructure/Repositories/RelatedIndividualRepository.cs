@@ -13,18 +13,16 @@ internal sealed class RelatedIndividualRepository(
 
     public async Task<List<RelatedIndividualsReport>> GetRelatedIndividualsReportAsync(int? individualId = null, CancellationToken cancellationToken = default)
     {
-        // Group by IndividualId and RelationshipType
         var groupedData = await _context.RelatedIndividuals
             .GroupBy(r => new { r.IndividualId, r.RelationshipType })
             .Select(g => new
             {
-                IndividualId = g.Key.IndividualId,
-                RelationshipType = g.Key.RelationshipType,
+                g.Key.IndividualId,
+                g.Key.RelationshipType,
                 Count = g.Count()
             })
             .ToListAsync(cancellationToken);
 
-        // Group by IndividualId and create a list of RelationshipCount objects
         var report = groupedData
             .GroupBy(g => g.IndividualId)
             .Select(g => new RelatedIndividualsReport
@@ -41,6 +39,14 @@ internal sealed class RelatedIndividualRepository(
         return report;
     }
 
+    public async Task<List<RelatedIndividual>> GetAllRelationsAsync(int individualId, int relatedIndividualId, CancellationToken cancellationToken = default)
+    {
+        return await _context.RelatedIndividuals
+            .Where(r => (r.IndividualId == individualId && r.RelatedIndividualId == relatedIndividualId) ||
+                        (r.IndividualId == relatedIndividualId && r.RelatedIndividualId == individualId))
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<bool> CheckIfRelationExistsAsync(int individualId, int relatedIndividualId, CancellationToken cancellationToken = default)
     {
         return await _context.RelatedIndividuals
@@ -52,13 +58,9 @@ internal sealed class RelatedIndividualRepository(
         await _context.RelatedIndividuals.AddRangeAsync(relatedIndividuals, cancellationToken);
     }
 
-    public async Task DeleteAsync(int individualId, int relatedIndividualId, CancellationToken cancellationToken = default)
+    public void DeleteRange(List<RelatedIndividual> relatedIndividuals)
     {
-        var relation = await _context.RelatedIndividuals
-            .FirstOrDefaultAsync(r => r.IndividualId == individualId && r.RelatedIndividualId == relatedIndividualId, cancellationToken);
-
-        if (relation != null)
-            _context.RelatedIndividuals.Remove(relation);
+        _context.RelatedIndividuals.RemoveRange(relatedIndividuals);
     }
 
     public async Task DeleteAllRelationsAsync(int individualId, CancellationToken cancellationToken = default)

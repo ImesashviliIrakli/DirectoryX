@@ -16,13 +16,13 @@ internal sealed class DeleteRelatedIndividualCommandHandler(
 
     public async Task<Result> Handle(DeleteRelatedIndividualCommand request, CancellationToken cancellationToken)
     {
-        var exists = await _relatedIndividualRepository.CheckIfRelationExistsAsync(request.IndividualId, request.RelatedIndividualId, cancellationToken);
+        var relatedIndividuals = await _relatedIndividualRepository
+            .GetAllRelationsAsync(request.IndividualId, request.RelatedIndividualId, cancellationToken);
 
-        if (!exists)
+        if (!relatedIndividuals.Any())
             return Result.Failure(GlobalStatusCodes.NotFound, RelatedIndividualErrors.RelationshipNotFound);
 
-        await _relatedIndividualRepository.DeleteAsync(request.IndividualId, request.RelatedIndividualId, cancellationToken);
-        await _relatedIndividualRepository.DeleteAsync(request.RelatedIndividualId, request.IndividualId, cancellationToken);
+        _relatedIndividualRepository.DeleteRange(relatedIndividuals);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

@@ -3,7 +3,7 @@ using Domain.Enums;
 using FluentValidation;
 using MediatR;
 
-namespace Application.Behaviors;
+namespace Application.Abstractions.Behaviors;
 
 public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
@@ -27,7 +27,9 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
             .Select(validator => validator.Validate(request))
             .SelectMany(validationResult => validationResult.Errors)
             .Where(validationFailure => validationFailure != null)
-            .Select(failure => new Error(failure.PropertyName, failure.ErrorMessage))
+            .Select(failure => new ValidationError(
+                failure.PropertyName,
+                failure.ErrorMessage))
             .Distinct()
             .ToArray();
 

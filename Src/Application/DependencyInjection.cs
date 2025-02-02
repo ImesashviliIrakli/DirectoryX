@@ -1,4 +1,5 @@
-﻿using Application.Behaviors;
+﻿using Application.Abstractions.Behaviors;
+using Application.Mapper;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,8 @@ public static class DependencyInjection
 
             configuration.AddOpenBehavior(typeof(LoggingBehavior<,>));
         });
+
+        services.AddAutoMapper(typeof(Profiles));
 
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 

@@ -16,12 +16,12 @@ internal sealed class AddIndividualCommandHandler(
     public async Task<Result> Handle(AddIndividualCommand request, CancellationToken cancellationToken)
     {
         var individual = new Individual(
-                request.FirstName,
-                request.LastName,
-                request.Gender,
-                request.PersonalNumber,
-                request.DateOfBirth,
-                request.CityId
+                firstName: request.FirstName,
+                lastName: request.LastName,
+                gender: request.Gender,
+                personalNumber: request.PersonalNumber,
+                dateOfBirth: request.DateOfBirth,
+                cityId: request.CityId
             );
 
         if (request.PhoneNumbers.Count > 0)

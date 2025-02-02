@@ -13,4 +13,9 @@ public static class RelatedIndividualErrors
         "NotFound",
         "Relationship not found."
         );
+
+    public static readonly Error RelationshipAlreadyExists = new(
+        "BadRequest",
+        "Relationship already exists."
+        );
 }

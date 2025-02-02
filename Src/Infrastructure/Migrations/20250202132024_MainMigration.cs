@@ -21,7 +21,7 @@ namespace Infrastructure.Migrations
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false),
                     PersonalNumber = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
                     CityId = table.Column<int>(type: "int", nullable: false),
                     ImagePath = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true)
                 },
@@ -71,6 +71,12 @@ namespace Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Individuals_PersonalNumber",
+                table: "Individuals",
+                column: "PersonalNumber",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_PhoneNumbers_IndividualId",

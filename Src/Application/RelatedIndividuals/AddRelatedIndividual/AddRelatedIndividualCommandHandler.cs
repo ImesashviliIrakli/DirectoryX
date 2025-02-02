@@ -24,6 +24,11 @@ internal sealed class AddRelatedIndividualCommandHandler(
         if (!checkIndividuals)
             return Result.Failure(GlobalStatusCodes.NotFound, RelatedIndividualErrors.EitherOneOrNoneExist);
 
+        var checkRelation = await _relatedIndividualRepository.CheckIfRelationExistsAsync(request.IndividualId, request.RelatedIndividualId, cancellationToken);
+
+        if (checkRelation)
+            return Result.Failure(GlobalStatusCodes.NotFound, RelatedIndividualErrors.RelationshipAlreadyExists);
+
         var relatedIndividuals = new List<RelatedIndividual>
         {
             new RelatedIndividual(request.IndividualId, request.RelatedIndividualId, request.RelationshipType),

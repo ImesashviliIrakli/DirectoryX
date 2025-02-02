@@ -39,7 +39,7 @@ public static class SeedDataExtensions
             .RuleFor(i => i.LastName, f => f.Person.LastName)
             .RuleFor(i => i.Gender, f => f.PickRandom<GenderType>())
             .RuleFor(i => i.PersonalNumber, f => f.Random.Replace("##########"))
-            .RuleFor(i => i.DateOfBirth, f => f.Date.Past(30))
+        .RuleFor(i => i.DateOfBirth, f => DateOnly.FromDateTime(f.Date.Past(80, DateTime.Today.AddYears(-18))))
             .RuleFor(i => i.CityId, f => f.Random.Int(1, 100))
             .RuleFor(i => i.ImagePath, f => f.Image.PicsumUrl());
 

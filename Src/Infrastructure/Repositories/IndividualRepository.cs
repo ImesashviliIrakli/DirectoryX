@@ -58,6 +58,7 @@ internal sealed class IndividualRepository(AppDbContext context) : IIndividualRe
 
         // Apply paging
         var individuals = await query
+            .AsNoTracking() // Don't need to track, only used for displaying individuals
             .OrderBy(i => i.LastName) // Default sorting
             .Skip((criteria.PageNumber - 1) * criteria.PageSize)
             .Take(criteria.PageSize)
@@ -66,9 +67,14 @@ internal sealed class IndividualRepository(AppDbContext context) : IIndividualRe
         return (individuals, totalCount);
     }
 
-    public async Task<Individual?> GetByIdAsync(int individualId, bool includeDetails = false, CancellationToken cancellationToken = default)
+    public async Task<Individual?> GetByIdAsync(int individualId, bool includeDetails = false, bool track = true, CancellationToken cancellationToken = default)
     {
         var query = _context.Individuals.AsQueryable();
+
+        if(!track)
+        {
+            query = query.AsNoTracking();
+        }
 
         if (includeDetails)
         {

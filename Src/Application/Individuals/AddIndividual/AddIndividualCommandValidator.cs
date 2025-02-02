@@ -31,10 +31,18 @@ public sealed class AddIndividualCommandValidator : AbstractValidator<AddIndivid
 
         RuleFor(x => x.CityId)
             .GreaterThan(0).WithMessage("City ID must be a valid positive integer.");
+
+        RuleForEach(x => x.PhoneNumbers)
+            .ChildRules(phone =>
+            {
+                phone.RuleFor(p => p.Number)
+                    .Matches("^[0-9]{9}$").WithMessage("Phone number must be exactly 9 digits.");
+            });
     }
 
-    private bool BeAtLeast18YearsOld(DateTime dateOfBirth)
+    private bool BeAtLeast18YearsOld(DateOnly dateOfBirth)
     {
-        return dateOfBirth <= DateTime.Today.AddYears(-18);
+        var minimumBirthDate = DateOnly.FromDateTime(DateTime.Today.AddYears(-18));
+        return dateOfBirth <= minimumBirthDate;
     }
 }
