@@ -66,12 +66,11 @@ internal sealed class IndividualRepository(AppDbContext context) : IIndividualRe
 
         return (individuals, totalCount);
     }
-
     public async Task<Individual?> GetByIdAsync(int individualId, bool includeDetails = false, bool track = true, CancellationToken cancellationToken = default)
     {
         var query = _context.Individuals.AsQueryable();
 
-        if(!track)
+        if (!track)
         {
             query = query.AsNoTracking();
         }
@@ -79,18 +78,23 @@ internal sealed class IndividualRepository(AppDbContext context) : IIndividualRe
         if (includeDetails)
         {
             query = query
-                .Include(i => i.PhoneNumbers)
-                .Include(i => i.RelatedIndividuals);
+                .Include(x => x.PhoneNumbers)
+                .Include(x => x.RelatedIndividuals);
         }
 
-        return await query.FirstOrDefaultAsync(i => i.Id == individualId, cancellationToken);
+        return await query.FirstOrDefaultAsync(x => x.Id == individualId, cancellationToken);
+    }
+
+    public async Task<bool> CheckIfIndividualExistsAsync(string personalNumber, CancellationToken cancellationToken = default)
+    {
+        return await _context.Individuals.AnyAsync(x => x.PersonalNumber.Equals(personalNumber), cancellationToken);
     }
 
     public async Task<bool> CheckIfIndividualsExistAsync(int individualId, int relatedIndividualId, CancellationToken cancellationToken = default)
     {
         var count = await _context.Individuals
-        .Where(i => i.Id == individualId || i.Id == relatedIndividualId)
-        .CountAsync(cancellationToken);
+            .Where(x => x.Id == individualId || x.Id == relatedIndividualId)
+            .CountAsync(cancellationToken);
 
         return count == 2;
     }

@@ -42,15 +42,15 @@ internal sealed class RelatedIndividualRepository(
     public async Task<List<RelatedIndividual>> GetAllRelationsAsync(int individualId, int relatedIndividualId, CancellationToken cancellationToken = default)
     {
         return await _context.RelatedIndividuals
-            .Where(r => (r.IndividualId == individualId && r.RelatedIndividualId == relatedIndividualId) ||
-                        (r.IndividualId == relatedIndividualId && r.RelatedIndividualId == individualId))
+            .Where(x => (x.IndividualId == individualId && x.RelatedIndividualId == relatedIndividualId) ||
+                        (x.IndividualId == relatedIndividualId && x.RelatedIndividualId == individualId))
             .ToListAsync(cancellationToken);
     }
 
     public async Task<bool> CheckIfRelationExistsAsync(int individualId, int relatedIndividualId, CancellationToken cancellationToken = default)
     {
         return await _context.RelatedIndividuals
-         .AnyAsync(r => r.IndividualId == individualId && r.RelatedIndividualId == relatedIndividualId, cancellationToken);
+         .AnyAsync(x => x.IndividualId == individualId && x.RelatedIndividualId == relatedIndividualId, cancellationToken);
     }
 
     public async Task AddRangeAsync(List<RelatedIndividual> relatedIndividuals, CancellationToken cancellationToken = default)
@@ -66,7 +66,7 @@ internal sealed class RelatedIndividualRepository(
     public async Task DeleteAllRelationsAsync(int individualId, CancellationToken cancellationToken = default)
     {
         var relations = await _context.RelatedIndividuals
-            .Where(r => r.IndividualId == individualId || r.RelatedIndividualId == individualId)
+            .Where(x => x.IndividualId == individualId || x.RelatedIndividualId == individualId)
             .ToListAsync(cancellationToken);
 
         if (relations.Any())

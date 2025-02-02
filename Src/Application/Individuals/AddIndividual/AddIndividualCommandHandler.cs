@@ -1,6 +1,8 @@
 ﻿using Application.Abstractions.Messaging;
 using Domain.Abstractions;
 using Domain.Entities;
+using Domain.Enums;
+using Domain.Errors;
 using Domain.Repositories;
 
 namespace Application.Individuals.AddIndividual;
@@ -15,6 +17,11 @@ internal sealed class AddIndividualCommandHandler(
 
     public async Task<Result> Handle(AddIndividualCommand request, CancellationToken cancellationToken)
     {
+        var checkByPersonalNumber = await _individualRepository.CheckIfIndividualExistsAsync(request.PersonalNumber, cancellationToken);
+
+        if (checkByPersonalNumber)
+            return Result.Failure(GlobalStatusCodes.BadRequest, IndividualErrors.IndividualAlreadyExists);
+
         var individual = new Individual(
                 firstName: request.FirstName,
                 lastName: request.LastName,

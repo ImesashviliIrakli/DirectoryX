@@ -9,8 +9,18 @@ public static class IndividualErrors
         "Individual not found."
         );
 
+    public static readonly Error IndividualAlreadyExists = new(
+        "BadRequest",
+        "Individual already exists."
+        );
+
     public static readonly Error ImageShouldNotBeEmpty = new(
         "BadRequest",
         "Image should not be empty."
+        );
+
+    public static readonly Error CouldNotDeleteOldImage = new(
+        "SystemFailure",
+        "Old image could not be deleted."
         );
 }
