@@ -4,6 +4,9 @@
 This project is an **Individual Management System** built with **.NET 8**, **Entity Framework Core**, and a **Clean Architecture** approach. It follows the **CQRS pattern** with **MediatR**, uses **FluentValidation** for validation, and implements the **Result Pattern** for better error handling. The domain model is designed using **Domain-Driven Design (DDD)** principles, with a rich domain model and repository and unit of work pattern for data access.
 
 ---
+![image](https://github.com/user-attachments/assets/58a6510a-2eec-492d-8a9b-f2fb22c0a3fe)
+
+---
 
 ## Features
 
